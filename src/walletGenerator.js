@@ -1,3 +1,7 @@
+// Import necessary modules
+const ethers = require('ethers');
+const fs = require('fs').promises;
+
 // Function to generate wallets
 async function generateWallets(count, withSeedPhrase) {
     try {
@@ -5,31 +9,35 @@ async function generateWallets(count, withSeedPhrase) {
             throw new Error('Number of wallets must be between 1 and 100.');
         }
 
-        const wallets = [];
+        const walletsData = [];
 
         // Generate wallets
         for (let i = 0; i < count; i++) {
-            const wallet = withSeedPhrase ? ethers.Wallet.createRandom() : new ethers.Wallet.createRandom();
-            wallets.push(wallet);
+            const wallet = ethers.Wallet.createRandom();
+            const walletData = {
+                address: wallet.address,
+                seedPhrase: withSeedPhrase ? wallet.mnemonic.phrase : null,
+                privateKey: withSeedPhrase ? null : wallet.privateKey
+            };
+            walletsData.push(walletData);
         }
 
-        // Display wallet addresses and save seed phrases or private keys to files
-        for (const wallet of wallets) {
-            console.log('Wallet Address:', wallet.address);
-
-            if (withSeedPhrase) {
-                const seedPhrase = wallet.mnemonic.phrase;
-                console.log('Seed Phrase:', seedPhrase);
-                await fs.writeFile(`wallet_${wallet.address}_seed_phrase.txt`, seedPhrase);
+        // Create data string to write to file
+        let dataString = '';
+        for (const walletData of walletsData) {
+            dataString += `Wallet Address: ${walletData.address}\n`;
+            if (walletData.seedPhrase) {
+                dataString += `Seed Phrase: ${walletData.seedPhrase}\n`;
             } else {
-                const privateKey = wallet.privateKey;
-                console.log('Private Key:', privateKey);
-                await fs.writeFile(`wallet_${wallet.address}_private_key.txt`, privateKey);
+                dataString += `Private Key: ${walletData.privateKey}\n`;
             }
-
-            console.log();
+            dataString += '\n';
         }
 
+        // Write data to file
+        await fs.writeFile('wallets_data.txt', dataString);
+        console.log('Wallets data saved to wallets_data.txt');
+        
     } catch (error) {
         console.error('Error:', error.message);
     }
