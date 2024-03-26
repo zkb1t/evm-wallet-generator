@@ -2,33 +2,41 @@
 const ethers = require('ethers');
 const fs = require('fs').promises;
 
-// Function to generate a wallet
-async function generateWallet(type) {
+// Function to generate wallets
+async function generateWallets(count) {
     try {
-        // Generate seed phrase
-        if (type === 'seed') {
+        if (count < 1 || count > 100) {
+            throw new Error('Number of wallets must be between 1 and 100.');
+        }
+
+        const wallets = [];
+
+        // Generate wallets
+        for (let i = 0; i < count; i++) {
             const wallet = ethers.Wallet.createRandom();
+            wallets.push(wallet);
+        }
+
+        // Display wallet addresses and save seed phrases or private keys to files
+        for (const wallet of wallets) {
+            console.log('Wallet Address:', wallet.address);
+
             const seedPhrase = wallet.mnemonic.phrase;
-            console.log('Seed Phrase:', seedPhrase);
-
-            // Save seed phrase to file
-            await fs.writeFile('wallet_seed_phrase.txt', seedPhrase);
-            console.log('Seed Phrase saved to wallet_seed_phrase.txt');
-        }
-        // Generate private key
-        else if (type === 'privateKey') {
-            const wallet = new ethers.Wallet.createRandom();
             const privateKey = wallet.privateKey;
-            console.log('Private Key:', privateKey);
 
-            // Save private key to file
-            await fs.writeFile('wallet_private_key.txt', privateKey);
-            console.log('Private Key saved to wallet_private_key.txt');
+            console.log('Seed Phrase:', seedPhrase);
+            console.log('Private Key:', privateKey);
+            console.log();
+
+            // Save seed phrase and private key to files
+            await fs.writeFile(`wallet_${wallet.address}_seed_phrase.txt`, seedPhrase);
+            await fs.writeFile(`wallet_${wallet.address}_private_key.txt`, privateKey);
         }
+
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error.message);
     }
 }
 
-// Export the generateWallet function
-module.exports = { generateWallet };
+// Export the generateWallets function
+module.exports = { generateWallets };
