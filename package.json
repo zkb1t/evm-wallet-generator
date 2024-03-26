@@ -1,0 +1,15 @@
+{
+  "name": "evm-wallet-generator",
+  "version": "1.0.0",
+  "description": "Tool for generating EVM wallets and saving seed phrase or private key to a text file.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "author": "zkb1t",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^5.0.0",
+    "commander": "^8.3.0"
+  }
+}
