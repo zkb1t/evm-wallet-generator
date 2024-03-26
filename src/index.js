@@ -6,18 +6,24 @@ const { generateWallet } = require('./walletGenerator');
 async function main() {
     // Define program commands and options
     program
-        .option('-s, --seed', 'Generate a wallet with a seed phrase')
-        .option('-k, --privateKey', 'Generate a wallet with a private key')
+        .option('--seed', 'Generate a wallet with a seed phrase')
+        .option('--privateKey', 'Generate a wallet with a private key')
         .parse(process.argv);
 
-    // Generate wallet based on the selected option
-    if (program.seed) {
-        await generateWallet('seed');
-    } else if (program.privateKey) {
-        await generateWallet('privateKey');
-    } else {
+    // Get the provided options
+    const options = program.opts();
+
+    // Check if any option is provided
+    if (!options.seed && !options.privateKey) {
         console.error('Please specify either --seed or --privateKey option.');
         process.exit(1);
+    }
+
+    // Generate wallet based on the selected option
+    if (options.seed) {
+        await generateWallet('seed');
+    } else if (options.privateKey) {
+        await generateWallet('privateKey');
     }
 }
 
