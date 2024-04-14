@@ -1,5 +1,5 @@
 {
-  "name": "evm-wallet-generator",
+  "name": "@zkb1t/evm-wallet-generator",
   "version": "1.0.3",
   "description": "Tool for generating EVM wallets and managing dependencies automatically.",
   "main": "index.js",
@@ -12,10 +12,13 @@
     "ethers": "^5.0.0",
     "commander": "^8.3.0",
     "npm-api": "^6.0.0",
-    "semver": "^7.3.2" 
+    "semver": "^7.3.2"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/zkb1t/evm-wallet-generator.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
