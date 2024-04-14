@@ -1,6 +1,6 @@
-// Import necessary modules
 const { program } = require('commander');
 const { generateWallets } = require('./walletGenerator');
+const { checkAndUpdateDependencies } = require('./dependencyManager');
 
 // Define the main application logic
 async function main() {
@@ -28,7 +28,10 @@ async function main() {
 
     // Generate wallets
     await generateWallets(options.count, options.seed);
+
+    // Check and update dependencies
+    await checkAndUpdateDependencies();
 }
 
 // Call the main function
-main();
+main().catch(error => console.error('Unhandled error occurred:', error));
