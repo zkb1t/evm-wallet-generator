@@ -42,7 +42,8 @@ evm-wallet-generator/
 ├── src/
 │   ├── index.js                # Main application file
 │   ├── walletGenerator.js      # Module for wallet generation
-│   └── fileHandler.js          # Module for file operations
+│   ├── fileHandler.js          # Module for file operations
+│   └── dependencyManager.js    # Module for dependency management
 │
 ├── package.json                # Dependency and script file
 ├── README.md                   # Usage instructions
